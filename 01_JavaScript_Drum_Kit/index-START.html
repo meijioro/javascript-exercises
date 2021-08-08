@@ -89,17 +89,20 @@ function play_audio(data_key) {
  */
 document.addEventListener('keydown', function(keycode) {
     let current_key = pressed_button(keycode.key);
-    let parentEl = current_key.closest('.key');    
 
-    // yellow glow
-    parentEl.classList.add('playing');
-    setTimeout(function(){ 
-      parentEl.classList.remove('playing');
-    }, 200);
+    if (current_key) {
+      let parentEl = current_key.closest('.key');    
 
-    play_audio(parentEl.dataset.key);
+      // yellow glow
+      parentEl.classList.add('playing');
+      setTimeout(function(){ 
+        parentEl.classList.remove('playing');
+      }, 200);
+
+      play_audio(parentEl.dataset.key);
+    }
+    
 });
-
 
 </script>
 
