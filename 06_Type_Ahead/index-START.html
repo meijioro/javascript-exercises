@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+      const input = document.querySelector(".search");
+      const suggestions = document.querySelector(".suggestions");
+
+      function getJson(url) {
+        return fetch(url).then((response) => response.json());
+      }
+
+      function matchVal(string, val) {
+        const regex = new RegExp(val, "gi");
+        return string.match(regex);
+      }
+
+      function filterMatches(val) {
+        return getJson(endpoint).then((data) => {
+          return data.filter((entry) => {
+            const { city, state } = entry; // deconstruct
+
+            // check if string is in either city or state return entry
+            return matchVal(city, val) || matchVal(state, val);
+          });
+        });
+      }
+
+      function showMatches() {
+        const val = this.value;
+        const arr = filterMatches(val);
+        const regex = new RegExp(val, "gi");
+
+        arr.then((entry) => {
+          let html = "";
+
+          entry.forEach((item) => {
+            const { city, state } = item;
+
+            // highlight string in state
+            const highlightState = state.replace(
+              regex,
+              `<mark class="h1">${val}</mark>`
+            );
+
+            // highlight string in city
+            const highlightCity = city.replace(
+              regex,
+              `<mark class="h1">${val}</mark>`
+            );
+
+            // append html
+            html += `<li><span>${highlightCity}, ${highlightState}</span><span class="population">${item.population}</span></li>`;
+          });
+
+          // replace all html inside with new
+          suggestions.innerHTML = html;
+        });
+      }
+
+      input.addEventListener("input", showMatches);
+    </script>
+  </body>
+</html>
