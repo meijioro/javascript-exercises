@@ -98,61 +98,35 @@
 <script>
 
   const checkboxes = document.querySelectorAll('input[type=checkbox]');
-  let start = checkboxes.length;
-  let end = 0;
-
-  function getCheckedBoxes(e) {
-
-    // match second checkbox to correct array position
-    checkboxes.forEach( (checkbox, index) => {
-      if (checkbox == e.target) {
-        end = index;
-      }
-    });
-    
-    if ( start < end ) { // top to bottom
-      for (let i = start; i < end; i++) {
-        checkboxes[i].checked = true;
-      }
-    } else { // bottom to top
-      for (let i = end; i < start; i++) {
-        checkboxes[i].checked = true;
-      }
-    }
-
-  }
-
+  let start;
+  let middleCheckboxes = false;
 
   function selectCheckboxes(e) {
 
-    // key pressed is shift
-    if (e.shiftKey) {
-      let el = document.activeElement; //el is focused 
-      
-      // last checkbox checked is focused when keypressed
-      // no checked box then window is focused
-      if (el.type == 'checkbox') { 
+    // element has properities (shiftKey & ctrlKey) if pressed while
+    // action takes place
+    if (this.checked && e.shiftKey) {
+      checkboxes.forEach( checkbox => {
 
-        // loop through checkboxes list
-        checkboxes.forEach( (checkbox,index) => {
-          // active el is same as checkbox in list
-          // set the starting checkbox to corresponding index
-          if (el == checkbox) { 
-            start = index;
-          }
-        });
-      }
+        // this is the current thing checked 
+        if (checkbox === this || checkbox === start) {
+          middleCheckboxes = !middleCheckboxes; // flip/toggle value
+        }
 
-      checkboxes.forEach( (checkbox,index) => {
-        // when 2nd checkbox is checked since ux is
-        // press shift after initial checkbox
-        checkbox.addEventListener('change', getCheckedBoxes);
+        if (middleCheckboxes) {
+          checkbox.checked = true;
+        }
+
       });
-    }
+    } 
+
+    // log the last thing checked which will 
+    // be the starting point for direction for checks to go
+    start = this;
 
   }
 
-  window.addEventListener('keydown', selectCheckboxes);
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', selectCheckboxes) );
 
 </script>
 
