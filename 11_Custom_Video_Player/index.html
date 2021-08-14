@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML Video Player</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="player">
+      <video class="player__video viewer" src="652333414.mp4"></video>
+
+      <div class="player__controls">
+        <div class="progress">
+          <div class="progress__filled"></div>
+        </div>
+        <button class="player__button toggle" title="Toggle Play">
+          <span aria-hidden="true">►</span>
+        </button>
+        <label class="sr-only" for="volume">Change volume</label>
+        <input
+          type="range"
+          name="volume"
+          class="player__slider"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          id="volume"
+        />
+        <label class="sr-only" for="playrate">Playback rate</label>
+        <input
+          type="range"
+          name="playbackRate"
+          class="player__slider"
+          min="0.5"
+          max="2"
+          step="0.1"
+          value="1"
+          id="playrate"
+        />
+        <button
+          data-skip="-10"
+          class="player__button"
+          title="Skip back 10 seconds"
+        >
+          « 10s
+        </button>
+        <button
+          data-skip="25"
+          class="player__button"
+          title="Skip forward 25 seconds"
+        >
+          25s »
+        </button>
+      </div>
+    </div>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
